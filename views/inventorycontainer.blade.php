@@ -86,22 +86,24 @@
 				</div>
 
 
-				<div class="form-row mb-1">
-					<div class="col-6">
-						<label for="gross_weight">{{ $__t('Weight | Net | Difference') }} <i
-								class="fa-solid fa-question-circle text-muted" data-toggle="tooltip"
-								title="{{ $__t('Total weight including container') }}"></i></label>
+				<div class="form-group">
+					<div class="form-row mb-1">
+						<div class="col-6">
+							<label for="gross_weight">{{ $__t('Weight | Net | Difference') }} <i
+									class="fa-solid fa-question-circle text-muted" data-toggle="tooltip"
+									title="{{ $__t('Total weight including container') }}"></i></label>
+						</div>
 					</div>
-				</div>
 
-				<div class="input-group mb-3">
-					<input type="number" class="form-control locale-number-input" id="gross_weight" name="gross_weight"
-						step="{{ $weight_precision_tolerance }}" min="0" placeholder="0">
-					<input type="text" class="form-control" id="net_weight" readonly style="cursor: not-allowed;"
-						tabindex="-1">
-					<div class="input-group-append">
-						<span class="input-group-text" id="gross_weight_unit"></span>
-						<span class="input-group-text d-none order-first" id="net_weight_diff"></span>
+					<div class="input-group">
+						<input type="number" class="form-control locale-number-input" id="gross_weight" name="gross_weight"
+							step="{{ $weight_precision_tolerance }}" min="0" placeholder="0">
+						<input type="text" class="form-control" id="net_weight" readonly style="cursor: not-allowed;"
+							tabindex="-1">
+						<div class="input-group-append">
+							<span class="input-group-text" id="gross_weight_unit"></span>
+							<span class="input-group-text d-none order-first" id="net_weight_diff"></span>
+						</div>
 					</div>
 					<div class="invalid-feedback"></div>
 				</div>
