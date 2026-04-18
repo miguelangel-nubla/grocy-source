@@ -269,8 +269,4 @@ $app->group('/api', function (RouteCollectorProxy $group)
 	$group->get('/pending-scans/by-barcode/{barcode}', '\Grocy\Controllers\PendingScansApiController:GetPendingScansByBarcode');
 })->add(JsonMiddleware::class);
 
-// Handle CORS preflight OPTIONS requests
-$app->options('/api/{routes:.+}', function (Request $request, Response $response): Response
-{
-	return $response->withStatus(204);
-});
+

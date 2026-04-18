@@ -20,7 +20,7 @@ class CorsMiddleware
 	{
 		if ($request->getMethod() == 'OPTIONS')
 		{
-			$response = $this->responseFactory->createResponse(200);
+			$response = $this->responseFactory->createResponse(204);
 		}
 		else
 		{
