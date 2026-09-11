@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@danielfarrell/bootstrap-combobox@https://github.com/berrnd/bootstrap-combobox.git#master":
-  version "1.1.8"
-  resolved "https://github.com/berrnd/bootstrap-combobox.git#fcf0110146f4daab94888234c57d198b4ca5f129"
+"@danielfarrell/bootstrap-combobox@https://github.com/berrnd/bootstrap-combobox.git#master-fork":
+  version "1.2.0"
+  resolved "https://github.com/berrnd/bootstrap-combobox.git#76d7b5a17bfaaad5ed2296b321d85bf60a900e2b"
 
 "@fontsource/roboto@^5.1.1":
   version "5.2.5"
