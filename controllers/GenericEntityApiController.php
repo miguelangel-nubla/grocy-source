@@ -72,7 +72,7 @@ class GenericEntityApiController extends BaseApiController
 				}
 
 				return $this->ApiResponse($response, [
-					'created_object_id' => $newObjectId
+					'created_object_id' => intval($newObjectId)
 				]);
 			}
 			catch (\Exception $ex)

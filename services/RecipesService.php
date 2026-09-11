@@ -163,7 +163,7 @@ class RecipesService extends BaseService
 		$this->getDatabaseService()->ExecuteDbStatement('INSERT INTO recipes_pos (recipe_id, product_id, amount, note, qu_id, only_check_single_unit_in_stock, ingredient_group, not_check_stock_fulfillment, variable_amount, price_factor) SELECT :last_insert_id, product_id, amount, note, qu_id, only_check_single_unit_in_stock, ingredient_group, not_check_stock_fulfillment, variable_amount, price_factor FROM recipes_pos WHERE recipe_id = :recipe_id', ['recipe_id' => $recipeId, 'last_insert_id' => $lastInsertId]);
 		$this->getDatabaseService()->ExecuteDbStatement('INSERT INTO recipes_nestings (recipe_id, includes_recipe_id, servings) SELECT :last_insert_id, includes_recipe_id, servings FROM recipes_nestings WHERE recipe_id = :recipe_id', ['recipe_id' => $recipeId, 'last_insert_id' => $lastInsertId]);
 
-		return $lastInsertId;
+		return intval($lastInsertId);
 	}
 
 	private function RecipeExists($recipeId)

@@ -72,7 +72,7 @@ class RecipesApiController extends BaseApiController
 		try
 		{
 			return $this->ApiResponse($response, [
-				'created_object_id' => $this->getRecipesService()->CopyRecipe($args['recipeId'])
+				'created_object_id' => intval($this->getRecipesService()->CopyRecipe($args['recipeId']))
 			]);
 		}
 		catch (\Exception $ex)
