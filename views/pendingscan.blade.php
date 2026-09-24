@@ -117,7 +117,7 @@
 
 		{{-- External barcode lookup --}}
 		@if(!empty($pendingScan->barcode))
-		@php($encodedBarcode = rawurlencode($pendingScan->barcode))
+		@php $encodedBarcode = rawurlencode($pendingScan->barcode); @endphp
 		<div class="card mb-2">
 			<div class="card-header py-1">
 				<h6 class="card-title mb-0">{{ $__t('External barcode lookup') }}</h6>
