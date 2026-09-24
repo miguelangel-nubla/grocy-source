@@ -1,4 +1,4 @@
-﻿$('#save-transfer-button').on('click', function(e)
+$('#save-transfer-button').on('click', function(e)
 {
 	e.preventDefault();
 
@@ -103,6 +103,20 @@
 						Grocy.FrontendHelpers.EndUiBusy("transfer-form");
 						toastr.success(successMessage);
 						Grocy.Components.ProductPicker.FinishFlow();
+
+						// Handle returnto parameter if present
+						if (GetUriParam("returnto") !== undefined)
+						{
+							if (GetUriParam("flow") === "InplaceAddBarcodeToExistingProduct")
+							{
+								Grocy.HandleReturnTo(10000); // 10 second delay with toast
+							}
+							else
+							{
+								Grocy.HandleReturnTo(2000); // Immediate redirect, but small delay to allow product barcode add to product call to finish
+							}
+							return;
+						}
 
 						if ($("#location_id_from option:selected").attr("data-is-freezer") == 0 && $("#location_id_to option:selected").attr("data-is-freezer") == 1) // Frozen
 						{

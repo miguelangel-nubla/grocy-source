@@ -100,6 +100,7 @@
 								'transfer' => 'badge-warning', // yellow like transfer in livescreen
 								'inventory' => 'badge-success', // green like purchase in livescreen
 								'open' => 'badge-primary',     // blue like product-opened in livescreen
+								'details' => 'badge-info',
 								default => 'badge-secondary'
 							};
 						@endphp

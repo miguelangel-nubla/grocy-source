@@ -36,8 +36,19 @@
 					<dt class="col-5 col-sm-4 mb-1">{{ $__t('Barcode') }}</dt>
 					<dd class="col-7 col-sm-8 mb-1"><code>{{ $pendingScan->barcode }}</code></dd>
 					<dt class="col-5 col-sm-4 mb-1">{{ $__t('Operation') }}</dt>
+					@php
+						$operationBadgeClass = match($pendingScan->operation) {
+							'add' => 'badge-success',
+							'consume' => 'badge-danger',
+							'transfer' => 'badge-warning',
+							'inventory' => 'badge-success',
+							'open' => 'badge-primary',
+							'details' => 'badge-info',
+							default => 'badge-secondary'
+						};
+					@endphp
 					<dd class="col-7 col-sm-8 mb-1"><span
-							class="badge badge-secondary">{{ ucfirst($pendingScan->operation) }}</span></dd>
+							class="badge {{ $operationBadgeClass }}">{{ ucfirst($pendingScan->operation) }}</span></dd>
 					<dt class="col-5 col-sm-4 mb-1">{{ $__t('Status') }}</dt>
 					<dd class="col-7 col-sm-8 mb-1">
 						@if($pendingScan->resolved)
@@ -189,43 +200,60 @@
 				<h6 class="card-title mb-0">{{ $__t('Quick Actions') }}</h6>
 			</div>
 			<div class="card-body p-2">
-				@if(str_contains($pendingScan->error_message, 'No product with barcode'))
-								<?php
-					$pendingScanUrl = '/pendingscan/' . $pendingScan->id;
-					$targetUrl = '';
-					switch ($pendingScan->operation) {
-						case 'add':
-							$targetUrl = '/purchase?flow=InplaceAddBarcodeToExistingProduct&barcode=' . urlencode($pendingScan->barcode) . '&returnto=' . urlencode($pendingScanUrl);
-							break;
-						case 'consume':
-							$targetUrl = '/consume?flow=InplaceAddBarcodeToExistingProduct&barcode=' . urlencode($pendingScan->barcode) . '&returnto=' . urlencode($pendingScanUrl);
-							break;
-						case 'transfer':
-							$targetUrl = '/transfer?flow=InplaceAddBarcodeToExistingProduct&barcode=' . urlencode($pendingScan->barcode) . '&returnto=' . urlencode($pendingScanUrl);
-							break;
-						case 'inventory':
-							$targetUrl = '/inventory?flow=InplaceAddBarcodeToExistingProduct&barcode=' . urlencode($pendingScan->barcode) . '&returnto=' . urlencode($pendingScanUrl);
-							break;
-					}
-																																																																?>
-								<a class="btn btn-primary btn-sm mb-1 d-block" href="{{ $U($targetUrl) }}">
-									<i class="fa-solid fa-barcode"></i> {{ $__t('Add Barcode to Existing Product') }}
-								</a>
+				@if(str_contains($pendingScan->error_message, 'No product with barcode') || empty($pendingScan->error_message) || stripos($pendingScan->error_message, 'not found') !== false)
+					@php
+						$pendingScanUrl = '/pendingscan/' . $pendingScan->id;
+						$targetUrl = '';
+						switch ($pendingScan->operation) {
+							case 'add':
+								$targetUrl = '/purchase?flow=InplaceAddBarcodeToExistingProduct&barcode=' . urlencode($pendingScan->barcode) . '&returnto=' . urlencode($pendingScanUrl);
+								break;
+							case 'consume':
+							case 'open':
+								$targetUrl = '/consume?flow=InplaceAddBarcodeToExistingProduct&barcode=' . urlencode($pendingScan->barcode) . '&returnto=' . urlencode($pendingScanUrl);
+								break;
+							case 'transfer':
+								$targetUrl = '/transfer?flow=InplaceAddBarcodeToExistingProduct&barcode=' . urlencode($pendingScan->barcode) . '&returnto=' . urlencode($pendingScanUrl);
+								break;
+							case 'inventory':
+								$targetUrl = '/inventory?flow=InplaceAddBarcodeToExistingProduct&barcode=' . urlencode($pendingScan->barcode) . '&returnto=' . urlencode($pendingScanUrl);
+								break;
+							case 'details':
+							default:
+								$targetUrl = '/purchase?flow=InplaceAddBarcodeToExistingProduct&barcode=' . urlencode($pendingScan->barcode) . '&returnto=' . urlencode($pendingScanUrl);
+								break;
+						}
+					@endphp
+					<a class="btn btn-primary btn-sm mb-1 d-block" href="{{ $U($targetUrl) }}">
+						<i class="fa-solid fa-barcode"></i> {{ $__t('Add Barcode to Existing Product') }}
+					</a>
 
-								<?php
-					switch ($pendingScan->operation) {
-						case 'consume':
-							$targetUrl = '/inventory?flow=InplaceAddBarcodeToExistingProduct&barcode=' . urlencode($pendingScan->barcode) . '&returnto=' . urlencode($pendingScanUrl);
-							break;
-						default:
-							break;
-					}
-					// Build create product return URL from inside out:
-					$targetUrl = '/product/new?flow=InplaceNewProductWithBarcode&barcode=' . urlencode($pendingScan->barcode) . '&returnto=' . urlencode($targetUrl);
-																																																																?>
-								<a class="btn btn-outline-primary btn-sm mb-1 d-block" href="{{ $U($targetUrl) }}">
-									<i class="fa-solid fa-plus"></i> {{ $__t('Create New Product') }}
-								</a>
+					@if($pendingScan->operation === 'details')
+						<a class="btn btn-outline-primary btn-sm mb-1 d-block"
+							href="{{ $U('/inventory?flow=InplaceAddBarcodeToExistingProduct&barcode=' . urlencode($pendingScan->barcode) . '&returnto=' . urlencode($pendingScanUrl)) }}">
+							<i class="fa-solid fa-list"></i> {{ $__t('Add Barcode to Existing Product') }} ({{ $__t('Inventory') }})
+						</a>
+						<a class="btn btn-outline-primary btn-sm mb-1 d-block"
+							href="{{ $U('/consume?flow=InplaceAddBarcodeToExistingProduct&barcode=' . urlencode($pendingScan->barcode) . '&returnto=' . urlencode($pendingScanUrl)) }}">
+							<i class="fa-solid fa-utensils"></i> {{ $__t('Add Barcode to Existing Product') }} ({{ $__t('Consume') }})
+						</a>
+					@endif
+
+					@php
+						switch ($pendingScan->operation) {
+							case 'consume':
+							case 'open':
+								$targetUrl = '/inventory?flow=InplaceAddBarcodeToExistingProduct&barcode=' . urlencode($pendingScan->barcode) . '&returnto=' . urlencode($pendingScanUrl);
+								break;
+							default:
+								break;
+						}
+						// Build create product return URL from inside out:
+						$createProductUrl = '/product/new?flow=InplaceNewProductWithBarcode&barcode=' . urlencode($pendingScan->barcode) . '&returnto=' . urlencode($targetUrl);
+					@endphp
+					<a class="btn btn-outline-primary btn-sm mb-1 d-block" href="{{ $U($createProductUrl) }}">
+						<i class="fa-solid fa-plus"></i> {{ $__t('Create New Product') }}
+					</a>
 				@endif
 
 				@if($pendingScan->operation === 'add')
@@ -257,6 +285,21 @@
 				@endif
 
 				@if($pendingScan->operation === 'inventory')
+					<a class="btn btn-warning btn-sm mb-1 d-block"
+						href="{{ $U('/inventory?barcode=' . urlencode($pendingScan->barcode) . '&returnto=' . urlencode('/pendingscan/' . $pendingScan->id)) }}">
+						<i class="fa-solid fa-list"></i> {{ $__t('Inventory Management') }}
+					</a>
+				@endif
+
+				@if($pendingScan->operation === 'details')
+					<a class="btn btn-info btn-sm mb-1 d-block"
+						href="{{ $U('/purchase?barcode=' . urlencode($pendingScan->barcode) . '&returnto=' . urlencode('/pendingscan/' . $pendingScan->id)) }}">
+						<i class="fa-solid fa-cart-plus"></i> {{ $__t('Add Stock (Purchase)') }}
+					</a>
+					<a class="btn btn-info btn-sm mb-1 d-block"
+						href="{{ $U('/consume?barcode=' . urlencode($pendingScan->barcode) . '&returnto=' . urlencode('/pendingscan/' . $pendingScan->id)) }}">
+						<i class="fa-solid fa-utensils"></i> {{ $__t('Consume Stock') }}
+					</a>
 					<a class="btn btn-warning btn-sm mb-1 d-block"
 						href="{{ $U('/inventory?barcode=' . urlencode($pendingScan->barcode) . '&returnto=' . urlencode('/pendingscan/' . $pendingScan->id)) }}">
 						<i class="fa-solid fa-list"></i> {{ $__t('Inventory Management') }}

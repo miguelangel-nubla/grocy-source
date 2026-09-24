@@ -1,4 +1,4 @@
-﻿var CurrentProductDetails;
+var CurrentProductDetails;
 
 $('#save-inventory-button').on('click', function(e)
 {
@@ -143,6 +143,20 @@ $('#save-inventory-button').on('click', function(e)
 									Grocy.FrontendHelpers.EndUiBusy("inventory-form");
 									toastr.success(successMessage);
 									Grocy.Components.ProductPicker.FinishFlow();
+
+									// Handle returnto parameter if present
+									if (GetUriParam("returnto") !== undefined)
+									{
+										if (GetUriParam("flow") === "InplaceAddBarcodeToExistingProduct")
+										{
+											Grocy.HandleReturnTo(10000); // 10 second delay with toast
+										}
+										else
+										{
+											Grocy.HandleReturnTo(2000); // Immediate redirect, but small delay to allow product barcode add to product call to finish
+										}
+										return;
+									}
 
 									Grocy.Components.ProductAmountPicker.Reset();
 									$('#inventory-change-info').addClass('d-none');

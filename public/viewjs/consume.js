@@ -101,6 +101,20 @@ $('#save-consume-button').on('click', function(e)
 						toastr.success(successMessage);
 						Grocy.Components.ProductPicker.FinishFlow();
 
+						// Handle returnto parameter if present
+						if (GetUriParam("returnto") !== undefined)
+						{
+							if (GetUriParam("flow") === "InplaceAddBarcodeToExistingProduct")
+							{
+								Grocy.HandleReturnTo(10000); // 10 second delay with toast
+							}
+							else
+							{
+								Grocy.HandleReturnTo(2000); // Immediate redirect, but small delay to allow product barcode add to product call to finish
+							}
+							return;
+						}
+
 						Grocy.Components.ProductAmountPicker.Reset();
 						$("#display_amount").attr("min", Grocy.DefaultMinAmount);
 						$("#display_amount").removeAttr("max");
@@ -207,6 +221,12 @@ $('#save-mark-as-open-button').on('click', function(e)
 					Grocy.Components.ProductPicker.Clear();
 					Grocy.Components.ProductPicker.GetInputElement().focus();
 					Grocy.FrontendHelpers.ValidateForm('consume-form');
+
+					if (GetUriParam("returnto") !== undefined)
+					{
+						Grocy.HandleReturnTo(2000);
+						return;
+					}
 				},
 				function(xhr)
 				{
