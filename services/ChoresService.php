@@ -200,7 +200,7 @@ class ChoresService extends BaseService
 
 		if ($chore->consume_product_on_execution == 1 && !empty($chore->product_id))
 		{
-			$transactionId = uniqid();
+			$transactionId = UniqueId();
 			$this->getStockService()->ConsumeProduct($chore->product_id, $chore->product_amount, false, StockService::TRANSACTION_TYPE_CONSUME, 'default', null, null, $transactionId, true);
 		}
 

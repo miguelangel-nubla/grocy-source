@@ -123,6 +123,14 @@ function IsAssociativeArray(array $array)
 	return array_keys($keys) !== $keys;
 }
 
+// uniqid() is the clock in microseconds: unique within one PHP process only, so two
+// requests served in the same microsecond (parallel API purchases) shared a
+// transaction id, each answer listed the other's booking and an undo undid both.
+function UniqueId(string $prefix = ''): string
+{
+	return $prefix . bin2hex(random_bytes(8));
+}
+
 function IsIsoDate($dateString)
 {
 	$d = DateTime::createFromFormat('Y-m-d', $dateString);

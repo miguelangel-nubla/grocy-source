@@ -162,14 +162,14 @@ class StockService extends BaseService
 
 		if ($transactionType === self::TRANSACTION_TYPE_PURCHASE || $transactionType === self::TRANSACTION_TYPE_INVENTORY_CORRECTION || $transactionType == self::TRANSACTION_TYPE_SELF_PRODUCTION) {
 			if ($transactionId === null) {
-				$transactionId = uniqid();
+				$transactionId = UniqueId();
 			}
 
 			if ($stockLabelType == 2) {
 				// Label per unit => single stock entry per unit
 
 				for ($i = 1; $i <= $amount; $i++) {
-					$stockId = uniqid('x');
+					$stockId = UniqueId('x');
 
 					$stockRow = $this->getDatabase()->stock()->createRow([
 						'product_id' => $productId,
@@ -218,7 +218,7 @@ class StockService extends BaseService
 			} else {
 				// No or single label => one stock entry
 
-				$stockId = uniqid();
+				$stockId = UniqueId();
 
 				$stockRow = $this->getDatabase()->stock()->createRow([
 					'product_id' => $productId,
@@ -370,7 +370,7 @@ class StockService extends BaseService
 			}
 
 			if ($transactionId === null) {
-				$transactionId = uniqid();
+				$transactionId = UniqueId();
 			}
 
 			foreach ($potentialStockEntries as $stockEntry) {
@@ -477,8 +477,8 @@ class StockService extends BaseService
 			throw new \Exception('Stock does not exist');
 		}
 
-		$correlationId = uniqid();
-		$transactionId = uniqid();
+		$correlationId = UniqueId();
+		$transactionId = UniqueId();
 		$logOldRowForStockUpdate = $this->createStockLogEntry([
 			'product_id' => $stockRow->product_id,
 			'amount' => $stockRow->amount,
@@ -999,7 +999,7 @@ class StockService extends BaseService
 			$purchasedDate = $stockEntry->purchased_date;
 		}
 
-		$transactionId = uniqid();
+		$transactionId = UniqueId();
 		$currentAmount = $stockEntry->amount;
 		$amountDifference = $newAmount - $currentAmount;
 
@@ -1142,7 +1142,7 @@ class StockService extends BaseService
 		}
 
 		if ($transactionId === null) {
-			$transactionId = uniqid();
+			$transactionId = UniqueId();
 		}
 
 		foreach ($potentialStockEntries as $stockEntry) {
@@ -1226,7 +1226,7 @@ class StockService extends BaseService
 					'purchased_date' => $stockEntry->purchased_date,
 					'location_id' => $stockEntry->location_id,
 					'shopping_location_id' => $stockEntry->shopping_location_id,
-					'stock_id' => uniqid(),
+					'stock_id' => UniqueId(),
 					'price' => $stockEntry->price,
 					'note' => $stockEntry->note
 				]);
@@ -1402,7 +1402,7 @@ class StockService extends BaseService
 		}
 
 		if ($transactionId === null) {
-			$transactionId = uniqid();
+			$transactionId = UniqueId();
 		}
 
 		foreach ($potentialStockEntriesAtFromLocation as $stockEntry) {
@@ -1451,7 +1451,7 @@ class StockService extends BaseService
 				}
 			}
 
-			$correlationId = uniqid();
+			$correlationId = UniqueId();
 			if ($amount >= $stockEntry->amount) {
 				// Take the whole stock entry - update stock table first, then log
 				$stockEntry->update([
@@ -1509,7 +1509,7 @@ class StockService extends BaseService
 					'amount' => $amount,
 					'best_before_date' => $newBestBeforeDate,
 					'purchased_date' => $stockEntry->purchased_date,
-					'stock_id' => uniqid(),
+					'stock_id' => UniqueId(),
 					'price' => $stockEntry->price,
 					'location_id' => $locationIdTo,
 					'shopping_location_id' => $stockEntry->shopping_location_id,

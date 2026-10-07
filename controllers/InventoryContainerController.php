@@ -434,7 +434,7 @@ class InventoryContainerController extends BaseController
 				throw new \Exception('No inventory change detected - adjust the gross weight to reflect actual inventory');
 			}
 
-			$transactionId = uniqid();
+			$transactionId = UniqueId();
 
 			if ($amountDifference > 0) {
 				$this->handleStockIncrease($requestBody, $productId, $stockId, $stockEntry, $amountDifference, $netWeight, $transactionId);

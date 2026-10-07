@@ -84,7 +84,7 @@ class RecipesService extends BaseService
 			throw new \Exception('Recipe does not exist');
 		}
 
-		$transactionId = uniqid();
+		$transactionId = UniqueId();
 		$recipePositions = $this->getDatabase()->recipes_pos_resolved()->where('recipe_id', $recipeId)->fetchAll();
 
 		$this->getDatabaseService()->GetDbConnectionRaw()->beginTransaction();
