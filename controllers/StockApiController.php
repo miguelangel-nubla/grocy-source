@@ -176,7 +176,7 @@ class StockApiController extends BaseApiController
 			}
 
 			if (array_key_exists('product_amount', $requestBody) && !empty($requestBody['product_amount']) && is_numeric($requestBody['product_amount'])) {
-				$amount = intval($requestBody['product_amount']);
+				$amount = floatval($requestBody['product_amount']);
 			}
 
 			if (array_key_exists('product_id', $requestBody) && !empty($requestBody['product_id']) && is_numeric($requestBody['product_id'])) {
@@ -909,7 +909,7 @@ class StockApiController extends BaseApiController
 			}
 
 			if (array_key_exists('product_amount', $requestBody) && !empty($requestBody['product_amount']) && is_numeric($requestBody['product_amount'])) {
-				$amount = intval($requestBody['product_amount']);
+				$amount = floatval($requestBody['product_amount']);
 			}
 
 			if (array_key_exists('product_id', $requestBody) && !empty($requestBody['product_id']) && is_numeric($requestBody['product_id'])) {
